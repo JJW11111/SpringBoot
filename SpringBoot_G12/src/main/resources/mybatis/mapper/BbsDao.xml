@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<!-- namespace : @Mapper 로 지정하고 현재 xml 파일과 연결될 인터페이스를 지정함 -->	
+<mapper namespace = "com.ezen.g12.dao.IBbsDao">
+
+	<!-- id 는 메서드이름을 쓰고, resultType 은 리턴될 자료형을 씀 -->
+	<select id="getList" resultType="com.ezen.g12.dto.BbsDto">	
+		select*from bbs order by id desc
+	</select>
+	
+	<!-- 파라미터 타입이 객체가 아니면 별도의 parameterType 을 지정하지 않아도 됨 -->
+<!--	
+	<insert id="write" >
+		insert into bbs(id, writer, title, content)
+		values(bbs_seq.nextVal, #{param1}, #{param2}, #{param3})
+	</insert> 
+-->
+	
+	
+	<!-- ParameterType 이 객체로 지정되면, sql 문속의 #{ }는 객체내 멤버변수이름으로 구분해서 쓸 수 있음 -->
+	<insert id="write" parameterType="com.ezen.g12.dto.BbsDto">
+		insert into bbs(id, writer, title, content)
+		values(bbs_seq.nextVal, #{writer}, #{title}, #{content})
+	</insert>
+	
+	
+	
+	<select id="view" resultType="com.ezen.g12.dto.BbsDto">	
+		select*from bbs where id=#{param1}
+	</select>
+	
+	
+	<update id="update" parameterType="com.ezen.g12.dto.BbsDto">
+		UPDATE bbs SET writer = #{writer}, title = #{title}, content = #{content}
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="com.ezen.g12.dto.BbsDto">
+		DELETE FROM bbs WHERE id = #{id}
+	</delete>
+	
+	
+	
+</mapper>
