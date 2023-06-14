@@ -12,6 +12,8 @@ public class ContentDto {
 	@NotEmpty(message="Writer is Empty")
 	@NotNull(message="Writer is Null")
 		private String writer;
+	
+	
 	@NotEmpty(message="Content is Empty")
 	@NotNull(message="Content is Null")
 		private String content;
