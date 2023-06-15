@@ -38,8 +38,8 @@
 		WHERE id = #{id}
 	</update>
 	
-	<delete id="delete" parameterType="com.ezen.g12.dto.BbsDto">
-		DELETE FROM bbs WHERE id = #{id}
+	<delete id="delete">
+		DELETE FROM bbs WHERE id = #{param1}
 	</delete>
 	
 	
