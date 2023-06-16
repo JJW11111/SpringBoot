@@ -1,5 +1,6 @@
 package com.ezen.g14.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,6 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ezen.g14.dto.BoardVO;
 import com.ezen.g14.dto.Paging;
 import com.ezen.g14.service.BoardService;
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 @Controller
 public class BoardController {
@@ -76,7 +79,24 @@ public class BoardController {
 //		String path = context.getRealPath("upload");
 		
 		String path = context.getRealPath("/upload");		
-						
+		
+		BoardVO bvo = new BoardVO();
+		 try {
+             MultipartRequest multi = new MultipartRequest(
+                             request, path, 5*1024*1024, "UTF-8", new DefaultFileRenamePolicy()
+             );
+
+             bvo.setPass( multi.getParameter("pass") );
+             bvo.setUserid( multi.getParameter("userid") );
+             bvo.setEmail( multi.getParameter("email") );
+             bvo.setTitle(  multi.getParameter("title") );
+             bvo.setContent( multi.getParameter("content") );
+             bvo.setImgfilename( multi.getFilesystemName("imgfilename") );
+             
+             bs.insertBoard( bvo );
+             
+     } catch (IOException e) { e.printStackTrace();
+     }		
 		return "redirect:/main";
 	}
 
