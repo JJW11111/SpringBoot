@@ -3,15 +3,12 @@ package com.ezen.g14.controller;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -68,15 +65,18 @@ public class BoardController {
 		return url;
 	}
 	
+	@Autowired
+	ServletContext context;
+	
 	@RequestMapping(value="/boardWrite", method=RequestMethod.POST)
-	public String boardWrite(
-			@ModelAttribute("dto") @Valid BoardVO boardvo,
-			BindingResult result,
-			Model model,
-			HttpServletRequest request
-	) {
+	public String boardWrite(HttpServletRequest request) {
 		
+//		HttpSession session = request.getSession();
+//		ServletContext context = session.getServletContext();
+//		String path = context.getRealPath("upload");
 		
+		String path = context.getRealPath("/upload");		
+						
 		return "redirect:/main";
 	}
 
