@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.ezen.g14.dao.IBoardDao">
+
+	<select id="getAllCount"  resultType="_int">
+		select count(*) from board
+	</select>
+	
+	<select id="getBoardList" 		parameterType="com.ezen.g14.dto.Paging" 
+										   					resultType="com.ezen.g14.dto.BoardVO">
+			select * from (
+				select * from (							   
+					select rownum as rn, b.* from ((select * from board order by num desc) b )
+				) where rn &gt;= #{startNum}
+			) where rn &lt;= #{endNum}	
+	</select>
+	
+	<select id="getReplyCount" resultType="_int">
+		select count(*) from reply where boardnum=#{param1}
+	</select>
+	
+	<update id="plusOneReadCount">
+		update board set readcount = readcount + 1 where num=#{param1}
+	</update>
+	
+	<select id="getBoard" resultType="com.ezen.g14.dto.BoardVO">
+		select*from board where num = #{param1}
+	</select>
+	
+	<select id="selectReply" resultType="com.ezen.g14.dto.ReplyVO">
+		select*from reply where boardnum = #{param1}
+	</select>
+	
+</mapper>
+
+
+
+
+
+
+
+
