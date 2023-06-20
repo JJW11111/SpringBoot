@@ -10,4 +10,12 @@
 		values(cart_seq.nextval, #{id}, #{pseq}, #{quantity})
 	</insert>
 
+	<select id="getCartList" resultType="com.ezen.g15.dto.CartVO">
+		select*from cart_view where id=#{param1} order by cseq desc
+	</select>
+	
+	<delete id="deleteCart">
+		delete from cart where cseq=#{param1}
+	</delete>
+	
 </mapper>
