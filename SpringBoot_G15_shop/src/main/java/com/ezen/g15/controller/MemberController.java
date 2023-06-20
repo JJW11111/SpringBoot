@@ -1,0 +1,197 @@
+package com.ezen.g15.controller;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.ezen.g15.dto.KakaoProfile;
+import com.ezen.g15.dto.KakaoProfile.KakaoAccount;
+import com.ezen.g15.dto.KakaoProfile.KakaoAccount.Profile;
+import com.ezen.g15.dto.MemberVO;
+import com.ezen.g15.dto.OAuthToken;
+import com.ezen.g15.service.MemberService;
+import com.google.gson.Gson;
+
+@Controller
+public class MemberController {
+
+	@Autowired
+	MemberService ms;
+	
+	@RequestMapping("loginForm")
+	public String login_form() {
+		return "member/login";
+	}
+	
+	
+	@RequestMapping(value="/login", method=RequestMethod.POST)
+	public String login(
+			@ModelAttribute("dto") @Valid MemberVO membervo,
+			BindingResult result, Model model, HttpServletRequest request ){
+		String url = "member/login";
+		if(result.getFieldError("id")!=null) 
+			model.addAttribute("message", result.getFieldError("id").getDefaultMessage());
+		else if(result.getFieldError("pwd")!=null)
+			model.addAttribute("message", result.getFieldError("pwd").getDefaultMessage());
+		else {
+			MemberVO mvo = ms.getMember(membervo.getId());
+			if(mvo==null)model.addAttribute("message", "ID가 없습니다");
+			else if(mvo.getPwd()==null)model.addAttribute("message", "관리자에게 문의하세요");
+			else if(!mvo.getPwd().equals(membervo.getPwd()))
+					model.addAttribute("message", "암호가 잘못되었습니다");
+			else if(mvo.getPwd().equals(membervo.getPwd())){
+				HttpSession session = request.getSession();
+				session.setAttribute("loginUser", mvo);
+				url = "redirect:/";
+			}	
+		}
+		return url;
+		
+	}
+	
+	@RequestMapping("/logout")
+	public String logout(Model model, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		session.removeAttribute("loginUser");
+		return "redirect:/";
+	}
+	
+	
+	@RequestMapping("/kakaostart")
+	public @ResponseBody String kakaostart() {
+		String a = "<script type='text/javascript'>"
+				+ "location.href='https:kauth.kakao.com/oauth/authorize?"
+				+ "client_id=8e3c47cfbcc4a50c90c6ba76c192a457&"
+				+ "redirect_uri=http://localhost:8070/kakaoLogin&"
+				+ "response_type=code'"
+				+ "</script>";
+		return a;
+	}
+	
+	
+	@RequestMapping("/kakaoLogin")
+	public String loginKakao(HttpServletRequest request)
+		throws UnsupportedEncodingException, IOException{
+		
+		// 카카오 아이디, 비번 인증 + 아이디 이메일 제공 동의 후 전송되는 암호화 코드
+        String code = request.getParameter("code");
+
+        // 전송된 암호화코드를 이용해서 토큰을 요청
+        String endpoint = "https://kauth.kakao.com/oauth/token";
+        URL url = new URL(endpoint); // import java.net.URL;
+
+        String bodyData = "grant_type=authorization_code&";
+        bodyData += "client_id=8e3c47cfbcc4a50c90c6ba76c192a457&";
+        bodyData += "redirect_uri=http://localhost:8070/kakaoLogin&";
+        bodyData += "code=" + code;
+        // Stream 연결
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection(); // import java.net.HttpURLConnection;
+        // http header 값 넣기
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+        conn.setDoOutput(true);
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream(), "UTF-8"));
+        bw.write(bodyData);
+        bw.flush();
+        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+        String input = "";
+        StringBuilder sb = new StringBuilder(); // 조각난 String 을 조립하기위한 객체
+        while ((input = br.readLine()) != null) {
+                sb.append(input);
+                System.out.println(input); // 수신된 토큰을 콘솔에 출력함
+        }
+        
+        // 위 토큰 내용을 본따 만든 클래스에 gson 파싱으로 옮겨 담음(sb -> OAuthToken)
+        Gson gson=new Gson();		
+		OAuthToken oAuthToken=gson.fromJson(sb.toString(), OAuthToken.class);        
+		// 토큰 이용해서 사용자 정보를 요청 수신
+		String endpoint2="https://kapi.kakao.com/v2/user/me";
+		URL url2 =new URL(endpoint2);
+		// import java.net.HttpURLConnection;
+		HttpsURLConnection conn2=(HttpsURLConnection)url2.openConnection();
+		//header 값 넣기
+		conn2.setRequestProperty("Authorization", "Bearer "+oAuthToken.getAccess_token());
+		conn2.setDoOutput(true);
+		// UserInfo 수신
+		BufferedReader br2=new BufferedReader(
+				new InputStreamReader(conn2.getInputStream(),"UTF-8")
+		);
+		String input2="";
+		StringBuilder sb2=new StringBuilder();
+		while((input2=br2.readLine())!=null) {
+			sb2.append(input2);
+			System.out.println(input2);
+		}
+		// sb2에 도착한 실제 사용자정보를 사용합니다
+		// sb2:{"id":2844973154,
+		// "connected_at":"2023-06-15T12:52:20Z",
+		// "properties":{"nickname":"ITnT"},
+		// "kakao_account":{
+		// 		"profile_nickname_needs_agreement":false,
+		// 		"profile":{
+		// 			"nickname":"ITnT"
+		// 		},
+		// 		"has_email":true,
+		// 		"email_needs_agreement":false,
+		// 		"is_email_valid":true,
+		// 		"is_email_verified":true,
+		// 		"email":"heejoon73@daum.net"
+		// 	}
+		// }
+		
+		Gson gson2=new Gson();
+		KakaoProfile kakaoProfile=gson2.fromJson(sb2.toString(), KakaoProfile.class);
+	
+		System.out.println(kakaoProfile.getId());
+		
+		KakaoAccount ac = kakaoProfile.getAccount();
+		System.out.println( ac.getEmail() );
+		
+		Profile pf = ac.getProfile();
+		System.out.println( pf.getNickname() );
+		
+		MemberVO mvo = ms.getMember(kakaoProfile.getId());
+		if(mvo==null) {
+			mvo = new MemberVO();
+			mvo.setId(kakaoProfile.getId());
+			mvo.setEmail(ac.getEmail());
+			mvo.setName(pf.getNickname());
+			mvo.setProvider("kakao");
+			ms.joinKakao(mvo);
+		}
+		
+		HttpSession session  = request.getSession();
+		session.setAttribute("loginUser", mvo);
+		
+        return "redirect:/";
+        
+	}
+	
+	
+	@RequestMapping("contract")
+	public String contract(Model model, HttpServletRequest request) {
+		return "member/contract";
+	}
+	
+	
+	
+}

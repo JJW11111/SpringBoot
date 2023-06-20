@@ -14,11 +14,11 @@ insert into member values('홍길동', 'scott' , '1234', 'scott@abc.com', '010-1
 alter table member add provider varchar2(30);
 
 select * from member;
-select * from board;
+select * from board order by num desc;
 
-update member set provider='board' where userid='scott';
+update member set provider='board' where userid='scott'
 
-delete from member where pwd='kakao';
+commit
 
 create table board(
 	num number(5) primary key,

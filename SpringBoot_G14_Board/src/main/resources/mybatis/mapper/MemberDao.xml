@@ -8,14 +8,15 @@
 	<select id="getMember" resultType="com.ezen.g14.dto.MemberVO" >
 		select * from member where userid=#{param1}
 	</select>
-
+	
 	<insert id="insertMember" parameterType="com.ezen.g14.dto.MemberVO">
-		insert into member(userid, name, pwd, email, phone, provider)
-		values(#{userid}, #{name}, #{pwd}, #{email}, #{phone}, #{provider})
+		insert into member( userid, name, pwd, email, phone, provider )
+		values( #{userid}, #{name}, #{pwd}, #{email}, #{phone}, #{provider} )
 	</insert>
 	
-	<update id="updateMember" parameterType="com.ezen.g14.dto.MemberVO">
-		update member set name = #{name}, pwd = #{pwd}, email = #{email}, phone = #{phone}
-		where userid = #{userid}
+	<update id="updateMember"  parameterType="com.ezen.g14.dto.MemberVO">
+		update member set name=#{name}, pwd=#{pwd}, email=#{email}, phone=#{phone}
+		where userid=#{userid}
 	</update>
+
 </mapper>

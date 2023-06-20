@@ -57,19 +57,54 @@ public class BoardService {
 
 	public HashMap<String, Object> boardView(int num) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		// 1. 조회수를 1 증가 시킴
+		//1. 조회수를 1증가 시킵니다
 		bdao.plusOneReadCount(num);
 		
-		// 2. 게시물을 조회함
+		//2. 게시물을 조회합니다
 		BoardVO bvo = bdao.getBoard(num);
 		
-		// 3 . 댓글을 조회함
-		List<ReplyVO> list = bdao.selectReply(num);
+		//3. 댓글을 조회합니다
+		List<ReplyVO> list = bdao.selectReply( num );
 		
 		result.put("board", bvo);
 		result.put("replyList", list);
 		
 		return result;
+	}
+
+	public void insertBoard(BoardVO bvo) {
+		bdao.insertBoard( bvo );		
+	}
+
+	public void insertReply(ReplyVO replyvo) {
+		bdao.insertReply( replyvo );		
+	}
+
+	public HashMap<String, Object> boardViewWithoutCount(int num) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		// bdao.plusOneReadCount(num);
+		BoardVO bvo = bdao.getBoard(num);
+		List<ReplyVO> list = bdao.selectReply( num );
+		result.put("board", bvo);
+		result.put("replyList", list);
+		
+		return result;
+	}
+
+	public void deleteReply(int num) {
+		bdao.deleteReply(num);		
+	}
+
+	public BoardVO getBoard(int num) {
+		return bdao.getBoard(num);
+	}
+
+	public void updateBoard(BoardVO boardvo) {
+		bdao.updateBoard( boardvo );		
+	}
+
+	public void removeBoard(int num) {
+		bdao.deleteBoard(num);
 	}
 	
 }

@@ -6,12 +6,9 @@ public class KakaoProfile {
 	public String getId() {
 		return id;
 	}
-	
 	private KakaoAccount kakao_account;
 	public KakaoAccount getAccount() { return kakao_account; }
 	
-
-
 	public class KakaoAccount {
 		
 		private Profile profile;

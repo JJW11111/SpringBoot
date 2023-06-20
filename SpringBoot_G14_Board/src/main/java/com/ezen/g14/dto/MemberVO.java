@@ -28,6 +28,5 @@ public class MemberVO {
 	@NotNull(message="이메일을 입력하세요")
 	private String Email;
 	
-	
 	private String provider;
 }

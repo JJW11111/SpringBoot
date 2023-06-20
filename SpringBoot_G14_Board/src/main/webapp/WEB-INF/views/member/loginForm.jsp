@@ -24,10 +24,11 @@
 		<div class="box"><div id="footer">
 			<input type="submit" value="로그인" />
 			<input type="reset" value="다시작성" />
-			<input type="button" value="일반 회원가입" onClick="location.href='memberJoinForm'"/>
-			<input type="button" value="카카오 회원가입 및 로그인" onclick="location.href='kakaostart'">
+			<input type="button" value="일반회원가입" onClick="location.href='memberJoinForm'"/>
+			<input type="button" value="카카오로 회원가입 및 로그인"	onclick="location.href='kakaostart'">
 			</div></div>
 		<div class="box"><div id="footer">${message}</div></div>
 </form>
+
 </body>
 </html>
