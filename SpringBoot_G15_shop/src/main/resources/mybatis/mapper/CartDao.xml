@@ -5,4 +5,9 @@
     
 <mapper namespace="com.ezen.g15.dao.ICartDao">
 
+	<insert id="insertCart" parameterType="com.ezen.g15.dto.CartVO">
+		Insert into cart(cseq, id, pseq, quantity)
+		values(cart_seq.nextval, #{id}, #{pseq}, #{quantity})
+	</insert>
+
 </mapper>

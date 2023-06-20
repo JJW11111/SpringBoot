@@ -24,7 +24,7 @@ CREATE TABLE address
 	zip_code varchar2(30),
 	bunji varchar2(30)
 );
-
+select*from member;
 
 CREATE TABLE cart
 (
@@ -62,7 +62,7 @@ CREATE TABLE orders
 	id varchar2(20) NOT NULL,
 	PRIMARY KEY (oseq)
 );
-
+select*from member;
 
 CREATE TABLE order_detail
 (

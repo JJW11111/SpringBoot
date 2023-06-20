@@ -1,5 +1,7 @@
 package com.ezen.g15.service;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,16 @@ public class MemberService {
 
 	public void joinKakao(MemberVO mvo) {
 		mdao.joinKakao(mvo);
+		
+	}
+
+	public void insertMember(MemberVO membervo) {
+		mdao.insertMember( membervo );
+		
+	}
+
+	public void updateMember(MemberVO membervo) {
+		mdao.updateMember(membervo);
 		
 	}
 }

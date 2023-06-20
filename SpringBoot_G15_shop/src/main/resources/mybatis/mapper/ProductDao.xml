@@ -12,4 +12,14 @@
 	<select id="getBestList" resultType="com.ezen.g15.dto.ProductVO">
 		select * from best_pro_view
 	</select>
+	
+	<select id="getKindList" resultType="com.ezen.g15.dto.ProductVO">
+		select * from product where kind=#{param1}
+	</select>
+	
+	<select id="getProduct" resultType="com.ezen.g15.dto.ProductVO">
+		select * from product where pseq=#{param1}
+	</select>
+	
+	
 </mapper>

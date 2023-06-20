@@ -12,4 +12,16 @@
 		insert into member(id, email, name, provider)
 		values(#{id}, #{email}, #{name}, #{provider})
 	</insert>
+	
+	<insert id="insertMember" parameterType="com.ezen.g15.dto.MemberVO">
+    	insert into member(id, email, name, pwd, zip_num, address1, address2, address3, phone)
+    	values(#{id}, #{email} , #{name}, #{pwd}, #{zip_num}, #{address1}, #{address2}, #{address3}, #{phone})
+	</insert>
+	
+	<update id="updateMember" parameterType="com.ezen.g15.dto.MemberVO">
+		update member set pwd=#{pwd}, name=#{name}, zip_num=#{zip_num},
+		address1=#{address1}, address2=#{address2}, address3=#{address3},
+		email=#{email}, phone=#{phone} where id=#{id}
+	</update>
+	
 </mapper>

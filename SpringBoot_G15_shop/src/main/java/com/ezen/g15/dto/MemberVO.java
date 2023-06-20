@@ -12,7 +12,8 @@ public class MemberVO {
 	@NotEmpty(message="id를 입력하세요")
 	private String id;
 	@NotEmpty(message="비밀번호를 입력하세요")
-    private String pwd;  
+    private String pwd; 
+	@NotEmpty(message="이름를 입력하세요")
     private String name;
 	@NotEmpty(message="이메일을 입력하세요")
     private String email;
