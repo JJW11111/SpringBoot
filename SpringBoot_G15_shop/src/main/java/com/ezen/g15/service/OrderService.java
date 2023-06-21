@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ezen.g15.dao.ICartDao;
 import com.ezen.g15.dao.IOrderDao;
 import com.ezen.g15.dto.CartVO;
+import com.ezen.g15.dto.OrderVO;
 
 @Service
 public class OrderService {
@@ -41,6 +42,19 @@ public class OrderService {
 		
 		// 5. 주문리스트와 주문번호를 해시맵에 담음
 		result.put("oseq", oseq);
+		
+		return result;
+	}
+	
+	public HashMap<String, Object> listOrderByOseq(int oseq) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		List<OrderVO> list = odao.listOrderByOseq(oseq);
+		result.put("orderList", list);
+		int totalPrice = 0;
+		for(OrderVO ovo : list) {
+			totalPrice += ovo.getPrice2() * ovo.getQuantity();
+		}
+		result.put("totalPrice", totalPrice);
 		
 		return result;
 	}

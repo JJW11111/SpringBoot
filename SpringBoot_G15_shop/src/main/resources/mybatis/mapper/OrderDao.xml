@@ -2,7 +2,28 @@
 
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
     
 <mapper namespace="com.ezen.g15.dao.IOrderDao">
+	
+	<insert id="insertOrders">
+		insert into orders(oseq, id) values(orders_seq.nextVal, #{parma1})
+	</insert>
+	
+	<select id="LookupMaxOseq" resultType="_int">
+		select max(oseq) from orders
+	</select>
+	
+	<insert id="insertOrderDetail">
+		insert into order_detail(odseq, oseq, pseq, quantity)
+		value(order_detail_seq.nextVal, #{param2}, #{param1.pseq}, #{param1.quantity})
+	</insert>
+	
+	<delete id="deleteCart">
+		delete from cart where cseq = #{param1}
+	</delete>
 
+	<select id="listOrderByOseq" resultType="com.ezen.g15.dto.OrderVO">
+		select*from order_view where oseq=#{param1}
+	</select>
 </mapper>
