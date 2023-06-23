@@ -10,9 +10,7 @@ import com.ezen.g15.dto.CartVO;
 public interface ICartDao {
 
 	void insertCart(CartVO cvo);
-
 	List<CartVO> getCartList(String id);
-
 	void deleteCart(String cseq);
-	
+
 }

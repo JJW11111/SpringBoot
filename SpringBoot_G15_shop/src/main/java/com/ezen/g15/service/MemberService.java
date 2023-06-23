@@ -13,23 +13,25 @@ public class MemberService {
 
 	@Autowired
 	IMemberDao mdao;
-	
+
 	public MemberVO getMember(String id) {
 		return mdao.getMember(id);
 	}
 
 	public void joinKakao(MemberVO mvo) {
-		mdao.joinKakao(mvo);
-		
+		mdao.joinKakao( mvo );		
 	}
 
 	public void insertMember(MemberVO membervo) {
-		mdao.insertMember( membervo );
-		
+		mdao.insertMember(membervo);
 	}
 
 	public void updateMember(MemberVO membervo) {
-		mdao.updateMember(membervo);
+		mdao.updateMember( membervo );
 		
+	}
+
+	public void withdrawalMember(String id) {
+		mdao.withDrawalMember(id);		
 	}
 }

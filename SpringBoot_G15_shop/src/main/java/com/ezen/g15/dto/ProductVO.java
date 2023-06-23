@@ -17,7 +17,6 @@ public class ProductVO {
     private String kind;   
     private Integer price1;
     @NotNull(message="판매가격을 입력하세요")
-	@NotEmpty(message="판매가격을 입력하세요")
     private Integer price2;
     private Integer price3;
     @NotNull(message="상품상세설명을 입력하세요")

@@ -22,4 +22,12 @@
 	</select>
 	
 	
+	<select id="getBannerList" resultType="com.ezen.g15.dto.BannerVO">
+		select * from banner where order_seq &lt;=5  order by order_seq
+	</select>
+	
 </mapper>
+
+
+
+

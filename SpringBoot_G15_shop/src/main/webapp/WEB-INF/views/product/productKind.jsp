@@ -4,7 +4,7 @@
 
 <article>
     <h2> Item</h2>   
-   	<c:forEach items="${productKindList}" var="productVO">
+   	<c:forEach items="${productKindList}"  var="productVO">
    		 <div id="item">
 			<a href="productDetail?pseq=${productVO.pseq}">
 				<img src="/product_images/${productVO.image}"/>
@@ -15,4 +15,4 @@
    	<div class="clear"></div>
 </article>
 
-<%@ include file="../include/headerfooter/footer.jsp" %>
+<%@ include file="../include/headerfooter/footer.jsp" %> 

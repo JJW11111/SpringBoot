@@ -3,27 +3,54 @@
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-    
-<mapper namespace="com.ezen.g15.dao.IOrderDao">
 	
+<mapper namespace="com.ezen.g15.dao.IOrderDao">
+
 	<insert id="insertOrders">
-		insert into orders(oseq, id) values(orders_seq.nextVal, #{parma1})
+		insert into orders( oseq, id) values( orders_seq.nextVal, #{param1} )
 	</insert>
 	
 	<select id="LookupMaxOseq" resultType="_int">
 		select max(oseq) from orders
 	</select>
 	
-	<insert id="insertOrderDetail">
-		insert into order_detail(odseq, oseq, pseq, quantity)
-		value(order_detail_seq.nextVal, #{param2}, #{param1.pseq}, #{param1.quantity})
+	<insert id="insertOderDetail">
+		insert into order_detail( odseq, oseq, pseq, quantity )
+		values( order_detail_seq.nextVal, #{param2}, #{param1.pseq}, #{param1.quantity})
 	</insert>
 	
 	<delete id="deleteCart">
-		delete from cart where cseq = #{param1}
+		delete from cart where cseq =#{param1}
 	</delete>
-
+	
 	<select id="listOrderByOseq" resultType="com.ezen.g15.dto.OrderVO">
-		select*from order_view where oseq=#{param1}
+		select * from order_view where oseq=#{param1}
 	</select>
+	
+	<select id="insertOderDetailOne" >
+		insert into order_detail( odseq, oseq, pseq, quantity )
+		values( order_detail_seq.nextVal, #{param3}, #{param1}, #{param2})
+	</select>
+	
+	<select id="selectSeqOrderIng" resultType="int">
+		select distinct oseq from order_view 
+		where id=#{param1} and (result='1' or result='2' or result='3') order by oseq desc
+	</select>
+	
+	<select id="selectSeqOrderAll" resultType="int">
+		select distinct oseq from order_view 
+		where id=#{param1} order by oseq desc
+	</select>
+	
+	<update id="updateOrderEnd">
+		update order_detail set  result='4' where odseq=#{param1}
+	</update>
+	
 </mapper>
+
+
+
+
+
+
+

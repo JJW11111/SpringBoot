@@ -52,6 +52,7 @@ public class MemberController {
 		else if (result.getFieldError("pwd") != null)
 			model.addAttribute("message", result.getFieldError("pwd").getDefaultMessage());
 		else {
+
 			MemberVO mvo = ms.getMember(membervo.getId());
 			if (mvo == null)
 				model.addAttribute("message", "ID가 없습니다");
@@ -59,6 +60,8 @@ public class MemberController {
 				model.addAttribute("message", "관리자에게 문의하세요");
 			else if (!mvo.getPwd().equals(membervo.getPwd()))
 				model.addAttribute("message", "암호가 잘못되었습니다");
+			else if( mvo.getUseyn().equals("N") )
+				model.addAttribute("message", "회원 가입 및 탈퇴 이력이 있는 사용자입니다. 재가입은 관리자에게 문의하세요");
 			else if (mvo.getPwd().equals(membervo.getPwd())) {
 				HttpSession session = request.getSession();
 				session.setAttribute("loginUser", mvo);
@@ -66,7 +69,6 @@ public class MemberController {
 			}
 		}
 		return url;
-
 	}
 
 	@RequestMapping("/logout")
@@ -78,9 +80,9 @@ public class MemberController {
 
 	@RequestMapping("/kakaostart")
 	public @ResponseBody String kakaostart() {
-		String a = "<script type='text/javascript'>" + "location.href='https:kauth.kakao.com/oauth/authorize?"
-				+ "client_id=8e3c47cfbcc4a50c90c6ba76c192a457&" + "redirect_uri=http://localhost:8070/kakaoLogin&"
-				+ "response_type=code'" + "</script>";
+		String a = "<script type='text/javascript'>" + "location.href='https://kauth.kakao.com/oauth/authorize?"
+				+ "client_id=4fde1cbde4d82ed7b25bd2a750d98d3c&" + "redirect_uri=http://localhost:8070/kakaoLogin&"
+				+ "response_type=code';" + "</script>";
 		return a;
 	}
 
@@ -89,18 +91,16 @@ public class MemberController {
 
 		// 카카오 아이디, 비번 인증 + 아이디 이메일 제공 동의 후 전송되는 암호화 코드
 		String code = request.getParameter("code");
-
 		// 전송된 암호화코드를 이용해서 토큰을 요청
+		// 토큰 요청 주소 url 설정 및 파라미터
 		String endpoint = "https://kauth.kakao.com/oauth/token";
 		URL url = new URL(endpoint); // import java.net.URL;
-
 		String bodyData = "grant_type=authorization_code&";
-		bodyData += "client_id=8e3c47cfbcc4a50c90c6ba76c192a457&";
+		bodyData += "client_id=4fde1cbde4d82ed7b25bd2a750d98d3c&";
 		bodyData += "redirect_uri=http://localhost:8070/kakaoLogin&";
 		bodyData += "code=" + code;
-		// Stream 연결
+		// Stream 연결 및 토큰 수신
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection(); // import java.net.HttpURLConnection;
-		// http header 값 넣기
 		conn.setRequestMethod("POST");
 		conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
 		conn.setDoOutput(true);
@@ -112,21 +112,28 @@ public class MemberController {
 		StringBuilder sb = new StringBuilder(); // 조각난 String 을 조립하기위한 객체
 		while ((input = br.readLine()) != null) {
 			sb.append(input);
-			System.out.println(input); // 수신된 토큰을 콘솔에 출력함
+			System.out.println(input); // 수신된 토큰을 콘솔에 출력합니다
 		}
+		// sb :{
+		// "access_token":"HCqlu2GvtRSqZxYLVfvI_hS5UWBqRQurROmy1u-1CiolDgAAAYjB90hu",
+		// "token_type":"bearer",
+		// "refresh_token":"5JWlJXgIWLWeCxa8O3KIKbfVIsz6NIQTIcQhAB_pCiolDgAAAYjB90hs",
+		// "expires_in":21599,
+		// "scope":"account_email profile_nickname",
+		// "refresh_token_expires_in":5183999
+		// }
 
-		// 위 토큰 내용을 본따 만든 클래스에 gson 파싱으로 옮겨 담음(sb -> OAuthToken)
+		// 위 토큰내용을 본따 만든 클래스에 gson 파싱으로 옮겨 담습니다( sb -> OAuthToken )
 		Gson gson = new Gson();
 		OAuthToken oAuthToken = gson.fromJson(sb.toString(), OAuthToken.class);
-		// 토큰 이용해서 사용자 정보를 요청 수신
+
+		// oAuthToken을 이용해서 사용자 정보를 요청 수신
 		String endpoint2 = "https://kapi.kakao.com/v2/user/me";
 		URL url2 = new URL(endpoint2);
 		// import java.net.HttpURLConnection;
 		HttpsURLConnection conn2 = (HttpsURLConnection) url2.openConnection();
-		// header 값 넣기
 		conn2.setRequestProperty("Authorization", "Bearer " + oAuthToken.getAccess_token());
 		conn2.setDoOutput(true);
-		// UserInfo 수신
 		BufferedReader br2 = new BufferedReader(new InputStreamReader(conn2.getInputStream(), "UTF-8"));
 		String input2 = "";
 		StringBuilder sb2 = new StringBuilder();
@@ -134,10 +141,12 @@ public class MemberController {
 			sb2.append(input2);
 			System.out.println(input2);
 		}
-		// sb2에 도착한 실제 사용자정보를 사용합니다
-		// sb2:{"id":2844973154,
+		// sb2 : {
+		// "id":2844973154,
 		// "connected_at":"2023-06-15T12:52:20Z",
-		// "properties":{"nickname":"ITnT"},
+		// "properties":{
+		// "nickname":"ITnT"
+		// },
 		// "kakao_account":{
 		// "profile_nickname_needs_agreement":false,
 		// "profile":{
@@ -151,14 +160,13 @@ public class MemberController {
 		// }
 		// }
 
+		// 전달받은 회원정보를 kakaoProfile 객체에 담습니다.( sb2 -> kakaoProfile )
 		Gson gson2 = new Gson();
 		KakaoProfile kakaoProfile = gson2.fromJson(sb2.toString(), KakaoProfile.class);
 
 		System.out.println(kakaoProfile.getId());
-
 		KakaoAccount ac = kakaoProfile.getAccount();
 		System.out.println(ac.getEmail());
-
 		Profile pf = ac.getProfile();
 		System.out.println(pf.getNickname());
 
@@ -176,7 +184,6 @@ public class MemberController {
 		session.setAttribute("loginUser", mvo);
 
 		return "redirect:/";
-
 	}
 
 	@RequestMapping("/contract")
@@ -199,78 +206,114 @@ public class MemberController {
 			result = 1;
 		model.addAttribute("result", result);
 		model.addAttribute("id", id);
-
 		return "member/idcheck";
 	}
 
-	@RequestMapping(value = "join", method = RequestMethod.POST)
-	public String join(@ModelAttribute("dto") @Valid MemberVO membervo, BindingResult result, Model model,
-			HttpServletRequest request, @RequestParam("reid") String reid, @RequestParam("pwdCheck") String pwdCheck) {
-
+	@RequestMapping(value = "join", method=RequestMethod.POST)
+	public String join(
+					@ModelAttribute("dto") @Valid MemberVO membervo,
+					BindingResult result, Model model, HttpServletRequest request, 
+					@RequestParam("reid") String reid, @RequestParam("pwdCheck") String pwdCheck) {
+		
 		model.addAttribute("reid", reid);
 		String url = "member/joinForm";
-
-		if (result.getFieldError("id") != null)
+		
+		if( result.getFieldError("id")!=null) 
 			model.addAttribute("message", result.getFieldError("id").getDefaultMessage());
-		else if (result.getFieldError("pwd") != null)
+		else if( result.getFieldError("pwd")!=null) 
 			model.addAttribute("message", result.getFieldError("pwd").getDefaultMessage());
-		else if (result.getFieldError("name") != null)
+		else if( result.getFieldError("name")!=null) 
 			model.addAttribute("message", result.getFieldError("name").getDefaultMessage());
-		else if (result.getFieldError("email") != null)
+		else if( result.getFieldError("email")!=null) 
 			model.addAttribute("message", result.getFieldError("email").getDefaultMessage());
-		else if (!reid.equals(membervo.getId()))
+		else if( !reid.equals(membervo.getId()) ) 
 			model.addAttribute("message", "id 중복체크를 하지 않았습니다");
-		else if (!pwdCheck.equals(membervo.getPwd()))
+		else if( !pwdCheck.equals( membervo.getPwd() ) ) 
 			model.addAttribute("message", "비밀번호 확인이 일치하지 않습니다");
 		else {
-			model.addAttribute("message", "회원가입이 완료되었습니다. 로그인하세요");
+			model.addAttribute("message", "회원가입이 완료되었습니다. 로그인 하세요");
 			ms.insertMember(membervo);
 			url = "member/login";
 		}
-
 		return url;
 	}
-
+	
+	
+	
 	@RequestMapping("/memberEditForm")
 	public String member_Edit_Form(Model model, HttpServletRequest request) {
-
+		
 		HttpSession session = request.getSession();
-		MemberVO mvo = (MemberVO) session.getAttribute("loginUser");
+		MemberVO mvo = (MemberVO)session.getAttribute("loginUser");
 		model.addAttribute("dto", mvo);
-
+		
 		return "member/memberUpdateForm";
 	}
 
-	@RequestMapping(value = "memberUpdate", method = RequestMethod.POST)
-	public String memberUpdate(@ModelAttribute("dto") @Valid MemberVO membervo, BindingResult result, Model model,
-			HttpServletRequest request, @RequestParam(value = "pwdCheck", required = false) String pwdCheck) {
-
+	
+	@RequestMapping(value = "memberUpdate",  method=RequestMethod.POST)
+	public String memberUpdate(@ModelAttribute("dto") @Valid MemberVO membervo,
+			BindingResult result, Model model, HttpServletRequest request,
+			@RequestParam(value="pwdCheck", required=false) String pwdCheck ) {
+		
 		String url = "member/memberUpdateForm";
-		if (membervo.getProvider().equals("")) {
-
-			if (result.getFieldError("pwd") != null)
+		
+		if( membervo.getProvider().equals("") ) {
+			
+			if( result.getFieldError("pwd")!=null ) 
 				request.setAttribute("message", "비밀번호를 입력하세요");
-			else if (!pwdCheck.equals(membervo.getPwd()))
-				request.setAttribute("message", "비밀번호 확인이 일치하지 않습니다.");
-			else if (result.getFieldError("name") != null) {
+			else if( !pwdCheck.equals( membervo.getPwd() ) ) 
+				request.setAttribute("message", "비밀번호 확인이 일치하지 않습니다");
+			else if( result.getFieldError("name")!=null) {
 				request.setAttribute("message", result.getFieldError("name").getDefaultMessage());
-			} else {
+			}else{
 				ms.updateMember(membervo);
 				HttpSession session = request.getSession();
 				session.setAttribute("loginUser", membervo);
-				url = "redirect:/";
+				url="redirect:/";
 			}
-		} else {
-
-			if (result.getFieldError("pwd") != null)
+			
+		}else {
+			
+			if( result.getFieldError("name")!=null ) 
 				request.setAttribute("message", result.getFieldError("name").getDefaultMessage());
 			else {
 				ms.updateMember(membervo);
 				HttpSession session = request.getSession();
 				session.setAttribute("loginUser", membervo);
-				url = "redirect:/";
+				url="redirect:/";
 			}
 		}
+		
 		return url;
 	}
+	
+	
+	
+	@RequestMapping("/withdrawal")
+	public String withdrawal( HttpServletRequest request , Model model) {
+		
+		HttpSession session = request.getSession();
+		MemberVO mvo = (MemberVO)session.getAttribute("loginUser");
+		ms.withdrawalMember( mvo.getId() );
+		model.addAttribute("message" , "회원탈퇴가 정상적으로 처리되었습니다");
+		return "member/login";
+	}
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

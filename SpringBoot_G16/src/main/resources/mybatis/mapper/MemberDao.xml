@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.ezen.g16.dao.IMemberDao">
+
+	<resultMap id="memberMap" type="java.util.HashMap"></resultMap>
+	<!-- 프로시져를 사용하는 마이바티스에서는 MemberVO 같은 dto 클래스를 사용하지 않음 
+		 대신 무엇이든 필드명을 키로 데이터 값을 value 로 저장할 수 있는 해쉬맵을 사용함-->
+	
+	<!-- 파라미터가 hashMap인 경우도 그 안의 담긴 키값들을 #{} 안에 넣어서 value값을 대입할 수 있음 -->
+	<select id="getMember" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{
+			CALL getMember(
+				#{userid}, 
+				#{ref_cursor, mode=OUT, jdbcType=CURSOR, javaType=ResultSet, resultMap=memberMap}
+			)
+		}
+	</select>
+	<!-- 결과 레코드가 하나이든 여러개이든 최종 결과로 담기는 형태는 ArrayList<HashMap<>> 형태가 될 예정임 -->
+	<!-- 레코드 하나가 HashMap<String, Object> 에 담긴다는 뜻임 -->
+
+</mapper>

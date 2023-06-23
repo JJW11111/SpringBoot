@@ -5,4 +5,101 @@
     
 <mapper namespace="com.ezen.g15.dao.IAdminDao">
 
+	<select id="getPwd"  resultType="string">
+		select pwd from worker where id=#{param1}
+	</select>
+	
+	<select id="getAllCount"  resultType="_int">
+		select count(*) from  ${param1}   where   ${param2}   like  '%'||#{param3}||'%'
+	</select>
+	
+	
+	<select id="listProduct" resultType="com.ezen.g15.dto.ProductVO">
+		select * from ( 
+		select * from(
+			select rownum as rn, p.* from 
+			((select * from product   where name like '%'||#{param2}||'%'   order by pseq desc) p )
+		) where rn &gt;= #{param1.startNum} 
+		) where rn &lt;= #{param1.endNum} 
+	</select>
+	
+	
+	<insert id="insertProduct" parameterType="com.ezen.g15.dto.ProductVO" >
+		insert into product ( pseq, kind, name, price1, price2, price3, content, image) 
+		        values( product_seq.nextval, #{kind}, #{name}, #{price1}, #{price2}, 
+		        #{price3}, #{content}, #{image} )
+	</insert>
+	
+	
+	<update id="updateProduct" parameterType="com.ezen.g15.dto.ProductVO" >
+		update product set kind=#{kind}, useyn=#{useyn}, name=#{name} , price1=#{price1}, 
+			price2=#{price2}, price3=#{price3}, content=#{content}, image=#{image}, 
+			bestyn=#{bestyn} where pseq=#{pseq}
+	</update>
+	
+	
+	<select id="listOrder" resultType="com.ezen.g15.dto.OrderVO">
+		select * from ( 
+		select * from(
+			select rownum as rn, p.* from ((select * from order_view   
+			where pname  like '%'||#{param2}||'%'   
+			order by result , odseq desc) p )
+		) where rn &gt;= #{param1.startNum} 
+		) where rn &lt;= #{param1.endNum} 
+	</select>
+	
+	
+	
+	<select id="listMember" resultType="com.ezen.g15.dto.MemberVO">
+		select * from ( 
+		select * from(
+			select rownum as rn, p.* from ((select * from member   
+			where  name like '%'||#{param2}||'%'   
+			order by indate desc ) p )
+		) where rn &gt;= #{param1.startNum} 
+		) where rn &lt;= #{param1.endNum} 
+	</select>
+	
+	
+	
+	<select id="listQna" resultType="com.ezen.g15.dto.QnaVO">
+		select * from ( 
+		select * from(
+			select rownum as rn, p.* from ((select * from qna   
+			where subject  like '%'||#{param2}||'%'   
+			order by qseq desc ) p )
+		) where rn &gt;= #{param1.startNum} 
+		) where rn &lt;= #{param1.endNum} 
+	</select>
+	
+	
+	<update id="updateOrderResult" >
+		update order_detail set result = result + 1 where odseq=#{param1}
+	</update>
+	
+	
+	<update id="memberReinsert">
+		update member set useyn=#{param2} where id=#{param1}
+	</update>
+	
+	
+	<update id="updateQna" >
+		update qna set reply=#{param2}, rep='2' where qseq=#{param1}
+	</update>
+		
+	<select id="getBannerList" resultType="com.ezen.g15.dto.BannerVO">
+		select * from banner order by order_seq
+	</select>
+	
+	<insert id="insertBanner" parameterType="com.ezen.g15.dto.BannerVO">
+		insert into banner(bseq, subject, order_seq, useyn, image )
+		values( banner_seq.nextVal, #{subject}, #{order_seq}, #{useyn}, #{image} )
+	</insert>
+	
+	<update id="updateSeq">
+		update banner set order_seq=#{param1}, useyn=#{param2} where bseq=#{param3}
+	</update>
+	
+	
 </mapper>
+

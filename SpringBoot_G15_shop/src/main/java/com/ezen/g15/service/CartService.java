@@ -17,15 +17,14 @@ public class CartService {
 
 	public void insertCart(CartVO cvo) {
 		cdao.insertCart(cvo);
-		
 	}
 
 	public HashMap<String, Object> getCartList(String id) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
-		List<CartVO> list = cdao.getCartList(id);
+		List<CartVO> list = cdao.getCartList( id );
 		int totalPrice = 0;
 		for(CartVO cvo : list)
-			totalPrice += cvo.getPrice2()*cvo.getQuantity();
+			totalPrice += cvo.getPrice2() * cvo.getQuantity(); 
 		
 		result.put("cartList", list);
 		result.put("totalPrice", totalPrice);
@@ -33,7 +32,12 @@ public class CartService {
 	}
 
 	public void deleteCart(String cseq) {
-		cdao.deleteCart(cseq);
-		
+		cdao.deleteCart( cseq );		
 	}
 }
+
+
+
+
+
+

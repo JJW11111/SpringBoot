@@ -11,6 +11,20 @@
 <script type="text/javascript" src="/script/member.js"></script>
 <script type="text/javascript" src="/script/mypage.js"></script>
 
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script type="text/javascript">
+    $(function(){
+    	var num=0;
+    	setInterval(function(){
+            $('#imgs').animate({ left : num * -968 },1000);
+                num++;
+                if(num==Number('${size}'))num=0;
+        }, 2000);
+    });
+</script>
+
+
+
 </head>
 <body>
 
@@ -27,15 +41,15 @@
 						<li><a href="contract">JOIN</a></li>
 					</c:when>
 		    		<c:otherwise>
-		       			<li style="color:blue;font-weight:bold;font-size:100%;">${loginUser.name}(${loginUser.id})</li>
+		       			<li style="color:blue;font-weight:bold;font-size:100%;width:150px; ">${loginUser.name}(${loginUser.id})</li>
 		       			<li><a href="memberEditForm">정보수정</a></li>
 		       			<li><a href="logout">LOGOUT</a></li>
 					</c:otherwise>
 				</c:choose>
 				<li><a href="cartList">CART</a></li>
 				<li><a href="myPage">MY PAGE</a></li>
-		    	<li ><a href="qnaList">고객센터</a></li>
-		    	<!-- <li ><a href="admin">admin</a></li> -->
+		    	<li ><a href="customer">고객센터</a></li>
+		    	<li ><a href="admin">admin</a></li>
 			</ul>
 		</nav>
 		<nav id="catagory_menu"> <!-- catagory menu -->

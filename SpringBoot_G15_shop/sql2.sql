@@ -200,6 +200,45 @@ select * from new_pro_view
 commit
 
 
+alter table qna add pass varchar2(30);
+
+alter table qna add passCheck char(1) default 'N';
+update qna set passCheck='N';
+
+
+select * from qna;
+
+
+
+update qna set pass='1234', passcheck='Y' where qseq=10;
+
+
+
+
+
+create table banner(
+	bseq number(5),
+	subject varchar2(30),
+	ORDER_SEQ number(3) default 1,
+	useyn char(1) default 'Y',
+	indate date default sysdate,
+	PRIMARY KEY (bseq)
+);
+
+
+alter table banner add image varchar2(30);
+
+create sequence banner_seq start with 1;
+
+
+
+select * from banner;
+
+
+
+
+
+
 
 
 

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.ezen.bt.dao.ITestDao">
+
+	<select id="getBannerList" resultType="com.ezen.bt.dto.BannerVO"> 
+		select * from bannerTest order by order_seq
+	</select>
+	
+	<insert id="insertBanner" parameterType="com.ezen.bt.dto.BannerVO">
+		insert into bannerTest(bseq, subject, order_seq, useyn, image )
+		values( banner_seq.nextVal, #{subject}, #{order_seq}, #{useyn}, #{image} )
+	</insert>
+	
+	<select id="getBannerListFive">
+		select * from bannerTest where order_seq &lt;=5  order by order_seq
+	</select>
+</mapper>
