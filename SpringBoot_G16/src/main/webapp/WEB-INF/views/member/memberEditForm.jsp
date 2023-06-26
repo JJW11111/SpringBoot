@@ -49,9 +49,9 @@
 			<input type="text" size="20" name="phone" value="${dto.phone}"></td></tr>
 		<tr><th>이메일</th><td><input type="text" name="email" size="20" 
 				value="${dto.email}"></td></tr>
-		</table><br>	<br>
+		</table><br><br>
 		<input type="submit" value="수정" > 
-		<input type="reset" 	value="다시 작성"> 
+		<input type="reset" value="다시 작성"> 
 		<input type="button" value="목록으로"	onclick="location.href='main'">
 		${message}
 	</form>

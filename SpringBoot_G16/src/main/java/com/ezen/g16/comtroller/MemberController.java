@@ -312,7 +312,6 @@ public class MemberController {
                     if(membervo.getProvider()!=null) paramMap.put("provider", membervo.getProvider());
                     paramMap.put("provider", null);
                     
-                    
                     ms.updateMember(paramMap);
                     
                     HttpSession session = request.getSession();

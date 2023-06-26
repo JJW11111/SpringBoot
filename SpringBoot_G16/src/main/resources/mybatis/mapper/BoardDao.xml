@@ -2,51 +2,71 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-    
+
 <mapper namespace="com.ezen.g16.dao.IBoardDao">
 
 	<resultMap id="boardMap" type="java.util.HashMap"></resultMap>
 	<resultMap id="replyMap" type="java.util.HashMap"></resultMap>
-	
-	<select id="getAllCount" statementType="CALLABLE" parameterType="java.util.HashMap">
+
+	<select id="getAllCount" statementType="CALLABLE"
+		parameterType="java.util.HashMap">
 		{
-			CAll getAllCount(#{cnt, mode=OUT, jdbcType=INTEGER})
+		CAll getAllCount(#{cnt, mode=OUT, jdbcType=INTEGER})
 		}
 	</select>
-	
-		<select id="selectBoard" statementType="CALLABLE" parameterType="java.util.HashMap">
+
+	<select id="selectBoard" statementType="CALLABLE"
+		parameterType="java.util.HashMap">
 		{
-			CALL selectBoard( 
-				#{startNum}, #{endNum}, 
-				#{ref_cursor, mode=OUT, jdbcType=CURSOR, javaType=ResultSet, resultMap=boardMap} 
-			)
+		CALL selectBoard(
+		#{startNum}, #{endNum},
+		#{ref_cursor, mode=OUT, jdbcType=CURSOR, javaType=ResultSet, resultMap=boardMap}
+		)
 		}
-		</select>
+	</select>
+
+	<select id="getBoard" statementType="CALLABLE"
+		parameterType="java.util.HashMap">
+		{
+		CALL getBoard(
+		#{num},
+		#{ref_cursor1, mode=OUT, jdbcType=CURSOR, javaType=ResultSet, resultMap=boardMap},
+		#{ref_cursor2, mode=OUT, jdbcType=CURSOR, javaType=ResultSet,
+		resultMap=replyMap}
+		)
+		}
+	</select>
+
+
+
+	<update id="plusOneReadCount" statementType="CALLABLE"
+		parameterType="java.util.HashMap">
+		{
+		CALL plusOneReadCount(
+		#{num}
+		)
+		}
+	</update>
+
+
+	<update id="insertReply" statementType="CALLABLE"
+		parameterType="java.util.HashMap">
+		{
+		CALL insertReply(
+		#{boardnum}, #{userid}, #{content}
+		)
+		}
+	</update>
+	
+	<update id="deleteReply" statementType="CALLABLE"
+		parameterType="java.util.HashMap">
+		{
+		CALL deleteReply(
+		#{replynum}
+		)
+		}
+	</update>
 	
 	
 </mapper>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
