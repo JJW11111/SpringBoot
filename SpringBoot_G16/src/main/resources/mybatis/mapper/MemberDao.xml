@@ -21,4 +21,36 @@
 	<!-- 결과 레코드가 하나이든 여러개이든 최종 결과로 담기는 형태는 ArrayList<HashMap<>> 형태가 될 예정임 -->
 	<!-- 레코드 하나가 HashMap<String, Object> 에 담긴다는 뜻임 -->
 
+
+	<insert id="joinKakao" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{
+			CALL joinKakao(
+				#{userid}, #{name}, #{email}, #{provider}
+			)
+		}
+	</insert>
+	
+	<insert id="insertMember" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{
+			CALL insertMember(
+				#{userid}, #{pwd}, #{name}, #{email}, #{phone}
+			)
+		}
+	</insert>
+	
+	
+	<update id="updateMember" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{
+			CALL updateMember(
+				#{userid}, #{pwd}, #{name}, #{email}, #{phone}
+			)
+		}
+	</update>
+	
+	
+	
+	
+	
+	
+	
 </mapper>

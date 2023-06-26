@@ -81,7 +81,7 @@ public class MemberController {
 	@RequestMapping("/kakaostart")
 	public @ResponseBody String kakaostart() {
 		String a = "<script type='text/javascript'>" + "location.href='https://kauth.kakao.com/oauth/authorize?"
-				+ "client_id=4fde1cbde4d82ed7b25bd2a750d98d3c&" + "redirect_uri=http://localhost:8070/kakaoLogin&"
+				+ "client_id=8e3c47cfbcc4a50c90c6ba76c192a457&" + "redirect_uri=http://localhost:8070/kakaoLogin&"
 				+ "response_type=code';" + "</script>";
 		return a;
 	}
@@ -96,7 +96,7 @@ public class MemberController {
 		String endpoint = "https://kauth.kakao.com/oauth/token";
 		URL url = new URL(endpoint); // import java.net.URL;
 		String bodyData = "grant_type=authorization_code&";
-		bodyData += "client_id=4fde1cbde4d82ed7b25bd2a750d98d3c&";
+		bodyData += "client_id=8e3c47cfbcc4a50c90c6ba76c192a457&";
 		bodyData += "redirect_uri=http://localhost:8070/kakaoLogin&";
 		bodyData += "code=" + code;
 		// Stream 연결 및 토큰 수신
