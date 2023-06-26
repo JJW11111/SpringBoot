@@ -73,6 +73,19 @@ public class BoardService {
 	public void getBoardWithoutCount(HashMap<String, Object> paramMap) {
 		bdao.getBoard(paramMap);		
 	}
+
+	public void insertBoard(HashMap<String, Object> paramMap) {
+		bdao.insertBoard(paramMap);
+		
+	}
+
+	public void updateBoard(HashMap<String, Object> paramMap) {
+		bdao.updateBoard(paramMap);		
+	}
+
+	public void removeBoard(HashMap<String, Object> paramMap) {
+		bdao.removeBoard(paramMap);		
+	}
 	
 	
 	

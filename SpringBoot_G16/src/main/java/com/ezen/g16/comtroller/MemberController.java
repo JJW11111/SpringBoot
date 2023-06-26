@@ -261,8 +261,7 @@ public class MemberController {
 		ModelAndView mav = new ModelAndView();
 
 		HttpSession session = request.getSession();
-		HashMap<String, Object> loginUser 
-			= (HashMap<String, Object>) session.getAttribute("loginUser"); // 세션에서
+		HashMap<String, Object> loginUser = (HashMap<String, Object>) session.getAttribute("loginUser"); // 세션에서
 																											// loginUSer
 																											// 추출
 
@@ -279,46 +278,53 @@ public class MemberController {
 		return mav;
 	}
 
-	@RequestMapping(value="/memberEdit", method=RequestMethod.POST)
-    public String memberEdit(
-                    @ModelAttribute("dto") @Valid MemberVO membervo, BindingResult result,
-                    @RequestParam(value="pwd_check", required=false) String pwchk,
-                    Model model, HttpServletRequest request ) {
+	@RequestMapping(value = "/memberEdit", method = RequestMethod.POST)
+	public String memberEdit(@ModelAttribute("dto") @Valid MemberVO membervo, BindingResult result,
+			@RequestParam(value = "pwd_check", required = false) String pwchk, Model model,
+			HttpServletRequest request) {
 		String url = "member/memberEditForm";
-            
-            if (membervo.getProvider()==null && result.getFieldError("pwd")!=null)
-                    model.addAttribute("message","비밀번호를 입력");
-            else if (result.getFieldError("name")!=null)
-                    model.addAttribute("message","이름을 입력");
-            
-            else if (membervo.getProvider()==null && pwchk!=null || !membervo.getPwd().equals(pwchk))
-                    model.addAttribute("message","비밀번호 확인이 일치하지 않음");
-            
-            else if (result.getFieldError("email")!=null)
-                    model.addAttribute("message","이메일을 입력");
-            else if (result.getFieldError("phone")!=null)
-                    model.addAttribute("message","전화번호를 입력");
-            else {
-                    HashMap<String, Object> paramMap = new HashMap<String, Object>();
-                    paramMap.put("userid", membervo.getUserid());
-                    
-                    if(membervo.getProvider()!=null) paramMap.put("pwd", "");
-                    paramMap.put("pwd", membervo.getPwd());
-                    
-                    paramMap.put("name", membervo.getName());
-                    paramMap.put("email", membervo.getEmail());
-                    paramMap.put("phone", membervo.getPhone());
-                    
-                    if(membervo.getProvider()!=null) paramMap.put("provider", membervo.getProvider());
-                    paramMap.put("provider", null);
-                    
-                    ms.updateMember(paramMap);
-                    
-                    HttpSession session = request.getSession();
-                    session.setAttribute("loginUser", paramMap);
-                    
-                    url="redirect:/main";
-            }
-            return url;
-    }
+
+		if (membervo.getProvider() == null && result.getFieldError("pwd") != null)
+			model.addAttribute("message", "비밀번호를 입력");
+		else if (result.getFieldError("name") != null)
+			model.addAttribute("message", "이름을 입력");
+
+		else if (membervo.getProvider() == null && pwchk != null || !membervo.getPwd().equals(pwchk))
+			model.addAttribute("message", "비밀번호 확인이 일치하지 않음");
+
+		else if (result.getFieldError("email") != null)
+			model.addAttribute("message", "이메일을 입력");
+		else if (result.getFieldError("phone") != null)
+			model.addAttribute("message", "전화번호를 입력");
+		else {
+			HashMap<String, Object> paramMap = new HashMap<String, Object>();
+			paramMap.put("userid", membervo.getUserid());
+
+			if (membervo.getProvider() != null)
+				paramMap.put("pwd", "");
+			paramMap.put("pwd", membervo.getPwd());
+
+			paramMap.put("name", membervo.getName());
+			paramMap.put("email", membervo.getEmail());
+			paramMap.put("phone", membervo.getPhone());
+
+			if (membervo.getProvider() != null)
+				paramMap.put("provider", membervo.getProvider());
+			paramMap.put("provider", null);
+
+			ms.updateMember(paramMap);
+
+			paramMap.put("ref_cursor", null);
+			ms.getMember(paramMap);
+			ArrayList<HashMap<String, Object>> list 
+				= (ArrayList<HashMap<String, Object>>) paramMap.get("ref_cursor");
+			HashMap<String, Object> mvo = list.get(0);
+
+			HttpSession session = request.getSession();
+			session.setAttribute("loginUser", paramMap);
+
+			url = "redirect:/main";
+		}
+		return url;
+	}
 }

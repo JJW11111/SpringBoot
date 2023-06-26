@@ -20,7 +20,8 @@
 		{
 		CALL selectBoard(
 		#{startNum}, #{endNum},
-		#{ref_cursor, mode=OUT, jdbcType=CURSOR, javaType=ResultSet, resultMap=boardMap}
+		#{ref_cursor,
+		mode=OUT, jdbcType=CURSOR, javaType=ResultSet, resultMap=boardMap}
 		)
 		}
 	</select>
@@ -30,7 +31,8 @@
 		{
 		CALL getBoard(
 		#{num},
-		#{ref_cursor1, mode=OUT, jdbcType=CURSOR, javaType=ResultSet, resultMap=boardMap},
+		#{ref_cursor1, mode=OUT,
+		jdbcType=CURSOR, javaType=ResultSet, resultMap=boardMap},
 		#{ref_cursor2, mode=OUT, jdbcType=CURSOR, javaType=ResultSet,
 		resultMap=replyMap}
 		)
@@ -57,7 +59,7 @@
 		)
 		}
 	</update>
-	
+
 	<update id="deleteReply" statementType="CALLABLE"
 		parameterType="java.util.HashMap">
 		{
@@ -66,7 +68,34 @@
 		)
 		}
 	</update>
-	
-	
+
+	<update id="insertBoard" statementType="CALLABLE"
+		parameterType="java.util.HashMap">
+		{
+		CALL insertBoard(
+		#{userid}, #{pass}, #{email}, #{content}, #{title}, #{imgfilename}
+		)
+		}
+	</update>
+
+
+	<update id="updateBoard" statementType="CALLABLE"
+		parameterType="java.util.HashMap">
+		{
+		CALL updateBoard(
+		#{num}, #{userid}, #{pass}, #{email}, #{content}, #{title}, #{imgfilename}
+		)
+		}
+	</update>
+
+	<update id="removeBoard" statementType="CALLABLE"
+		parameterType="java.util.HashMap">
+		{
+		CALL removeBoard(
+		#{num}
+		)
+		}
+	</update>
+
 </mapper>
 

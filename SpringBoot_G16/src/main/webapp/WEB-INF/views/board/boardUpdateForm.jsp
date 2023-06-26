@@ -16,8 +16,8 @@
 <form name="frm" method="post" action="boardUpdate" >
 <input type="hidden" name="num" value="${dto.num}">
 <table>
-	<tr><th>작성자</th><td>${loginUser.userid}
-		<input type="hidden" value="${loginUser.userid}" size="12" name="userid"></td></tr>
+	<tr><th>작성자</th><td>${loginUser.USERID}
+		<input type="hidden" value="${loginUser.USERID}" size="12" name="userid"></td></tr>
 	<tr><th>비번</th><td><input type="password" name="pass" size="12">* 필수 (게시물 수정 삭제시 필요합니다.)</td></tr>
 	<tr><th>이메일</th><td><input type="text" value="${dto.email}" size="12" name="email"></td></tr>
 	<tr><th>제목</th><td><input type="text" value="${dto.title}" size="12" name="title"></td></tr>
@@ -29,7 +29,7 @@
 			<c:otherwise>
 				<img src="/upload/${dto.imgfilename}" height="80" whidth="80"><br></c:otherwise>
 		</c:choose>
-		<div id="image" syle="float:left"></div><input type="hidden" name="imgfilename" >
+		<div id="image" style="float:left"></div><input type="hidden" name="imgfilename" >
 		<input type="button" value="파일선택"  onClick="selectimg();" >
 		<img src="" id="previewimg" width="150" style="display:none" /><br>파일을 수정하고자 할때만 선택하세요
 		<input type="hidden" name="oldfilename" value="${dto.imgfilename}"></td>	</tr>
