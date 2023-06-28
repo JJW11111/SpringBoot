@@ -5,6 +5,30 @@
     
 <mapper namespace="com.ezen.g17.dao.IQnaDao">
 	
+		<resultMap  id="qnaMap" type="java.util.HashMap"></resultMap>
+		
+	<select id="listQna"  statementType="CALLABLE" parameterType="java.util.HashMap">
+		{
+			CALL listQna(
+				#{ref_cursor ,mode=OUT, jdbcType=CURSOR, javaType=ResultSet, resultMap=qnaMap }
+			)
+		}
+	</select>
 	
+	<select id="getQna"  statementType="CALLABLE" parameterType="java.util.HashMap">
+		{
+			CALL getQna(
+				#{qseq},
+				#{ref_cursor ,mode=OUT, jdbcType=CURSOR, javaType=ResultSet, resultMap=qnaMap }
+			)
+		}
+	</select>
 	
+	<insert id="insertQna"  statementType="CALLABLE" parameterType="java.util.HashMap">
+		{
+			CALL insertQna(
+				#{id}, #{check}, #{pass}, #{subject}, #{content} 
+			)
+		}
+	</insert>
 </mapper>

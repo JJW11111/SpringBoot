@@ -8,25 +8,25 @@
 		<table id="cartList">
 			<tr><th>번호</th><th>제목</th> <th>등록일</th><th>답변 여부</th></tr>
       		<c:forEach items="${qnaList}"  var="qnaVO">
-      			<tr><td> ${qnaVO.qseq} </td>
+      			<tr><td> ${qnaVO.QSEQ} </td>
 					<td>
 							<c:choose>
-									<c:when test="${qnaVO.passcheck == 'Y'}">
-											<a href="#" onClick="passCheck('${qnaVO.qseq}')">
-												${qnaVO.subject}
+									<c:when test="${qnaVO.PASSCHECK == 'Y'}">
+											<a href="#" onClick="passCheck('${qnaVO.QSEQ}')">
+												${qnaVO.SUBJECT}
 											</a>
 											&nbsp;<img src="/images/key.png" style="width:20px;vertical-align: middle">
 									</c:when>
 									<c:otherwise>
-											<a href="qnaView?qseq=${qnaVO.qseq}">${qnaVO.subject}</a>
+											<a href="qnaView?qseq=${qnaVO.QSEQ}">${qnaVO.SUBJECT}</a>
 									</c:otherwise>
 							</c:choose>
 					</td>      
-        			<td><fmt:formatDate value="${qnaVO.indate}" type="date" /></td>
+        			<td><fmt:formatDate value="${qnaVO.INDATE}" type="date" /></td>
         			<td>
         				<c:choose>
-					        <c:when test="${qnaVO.rep==1}"> N </c:when>
-					        <c:when test="${qnaVO.rep==2}"> Y </c:when>
+					        <c:when test="${qnaVO.REP==1}"> N </c:when>
+					        <c:when test="${qnaVO.REP==2}"> Y </c:when>
 						</c:choose>
 					</td>
 				</tr>

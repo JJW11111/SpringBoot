@@ -14,11 +14,22 @@ public class MemberService {
 	IMemberDao mdao;
 
 	public void getMember(HashMap<String, Object> paramMap) {
-		mdao.getMember(paramMap);
+		mdao.getMember( paramMap);		
 	}
 
 	public void joinKakao(HashMap<String, Object> paramMap) {
-		mdao.joinKakao(paramMap);		
+		mdao.joinKakao( paramMap );		
 	}
 
+	public void insertMember(HashMap<String, Object> paramMap) {
+		mdao.insertMember( paramMap );
+		
+	}
+
+	public void updateMember(HashMap<String, Object> paramMap) {
+		mdao.updateMember( paramMap);
+		
+	}
+
+	
 }

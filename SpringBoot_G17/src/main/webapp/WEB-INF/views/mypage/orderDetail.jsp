@@ -8,28 +8,28 @@
 	<h3> 주문자 정보 </h3>
 	<table id="cartList">
 		<tr><th>주문일자</th><th>주문번호</th> <th>주문자</th><th>주문 총액</th></tr>
-	   	<tr><td><fmt:formatDate value="${orderDetail.indate}" 	type="date"/></td>
-		   <td> ${orderDetail.oseq} </td><td> ${orderDetail.mname} </td>
+	   	<tr><td><fmt:formatDate value="${orderDetail.INDATE}" 	type="date"/></td>
+		   <td> ${orderDetail.OSEQ} </td><td> ${orderDetail.MNAME} </td>
 		   <td> <fmt:formatNumber type="currency"	value="${totalPrice}" /></td></tr>
 		<tr>
-			<td colspan="4">배송지 : ${orderDetail.address1} ${orderDetail.address2}
-				${orderDetail.address3}</td></tr>
+			<td colspan="4">배송지 : ${orderDetail.ADDRESS1} ${orderDetail.ADDRESS2}
+				${orderDetail.ADDRESS3}</td></tr>
 	</table>
 	<h3> 주문 상품 정보 </h3> 
 	<table id="cartList">
 		<tr><th>상품명</th><th>상품별주문번호</th> <th>수량</th><th>가격</th><th>처리 상태</th></tr>
 	    <c:forEach items="${orderList}"  var="orderVO">
-	    	<tr><td> ${orderVO.pname} </td><td> ${orderVO.odseq}</td><td> ${orderVO.quantity} </td>
-				<td> <fmt:formatNumber type="currency" 	value="${orderVO.price2*orderVO.quantity}" /></td>
+	    	<tr><td> ${orderVO.PNAME} </td><td> ${orderVO.ODSEQ}</td><td> ${orderVO.QUANTITY} </td>
+				<td> <fmt:formatNumber type="currency" 	value="${orderVO.PRICE2*orderVO.QUANTITY}" /></td>
 				<td>
 					
 					<c:choose>
-				    	<c:when test='${orderVO.result=="1"}'>결제완료</c:when>
-						<c:when test='${orderVO.result=="2"}'>배송중</c:when>
-						<c:when test='${orderVO.result=="3"}'>
+				    	<c:when test='${orderVO.RESULT=="1"}'>결제완료</c:when>
+						<c:when test='${orderVO.RESULT=="2"}'>배송중</c:when>
+						<c:when test='${orderVO.RESULT=="3"}'>
 							<span style="color:blue;font-weight:bold;">배송완료</span>
 							<input type="button" value="구매확정" 
-							onClick="orderEnd('${orderVO.oseq}', '${orderVO.odseq}');">
+							onClick="orderEnd('${orderVO.OSEQ}', '${orderVO.ODSEQ}');">
 						</c:when>
 						<c:otherwise><span style="color:red;font-weight:bold;"> 구매확정 </span></c:otherwise>
 			    	</c:choose>

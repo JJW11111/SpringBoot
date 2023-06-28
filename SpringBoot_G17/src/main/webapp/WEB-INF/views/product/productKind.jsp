@@ -6,9 +6,9 @@
     <h2> Item</h2>   
    	<c:forEach items="${productKindList}"  var="productVO">
    		 <div id="item">
-			<a href="productDetail?pseq=${productVO.pseq}">
-				<img src="/product_images/${productVO.image}"/>
-				<h3>${productVO.name} </h3><p>${productVO.price2} </p>
+			<a href="productDetail?pseq=${productVO.PSEQ}">
+				<img src="/product_images/${productVO.IMAGE}"/>
+				<h3>${productVO.NAME} </h3><p>${productVO.PRICE2} </p>
 			</a>
    		</div>
    	</c:forEach>

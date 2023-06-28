@@ -9,12 +9,12 @@
 	<tr><th>주문일자</th><th>주문번호</th><th>상품명</th>
         	<th>결제 금액</th> <th>주문 상세</th> <th>처리상태</th></tr>
       	<c:forEach items="${orderList}"  var="orderVO">
-      	<tr><td><fmt:formatDate value="${orderVO.indate}" type="date"/></td>
-      		<td>${orderVO.oseq} </td>   	<td>${orderVO.pname} </td>
-        	<td><fmt:formatNumber value="${orderVO.price2}" type="currency"/> </td>
-        	<td><a href="orderDetail?oseq=${orderVO.oseq}">조회</a></td><td>
+      	<tr><td><fmt:formatDate value="${orderVO.INDATE}" type="date"/></td>
+      		<td>${orderVO.OSEQ} </td>   	<td>${orderVO.PNAME} </td>
+        	<td><fmt:formatNumber value="${orderVO.PRICE2}" type="currency"/> </td>
+        	<td><a href="orderDetail?oseq=${orderVO.OSEQ}">조회</a></td><td>
         	<c:choose>
-				<c:when test="${orderVO.result=='4'}">구매확정</c:when>
+				<c:when test="${orderVO.RESULT=='4'}">구매확정</c:when>
 				<c:otherwise >진행중</c:otherwise>
 			</c:choose>	
 				</td></tr>

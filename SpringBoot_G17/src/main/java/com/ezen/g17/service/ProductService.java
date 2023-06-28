@@ -14,7 +14,32 @@ public class ProductService {
 	IProductDao pdao;
 
 	public void getBestNewBannerList(HashMap<String, Object> paramMap) {
-		pdao.getBestNewBannerList(paramMap);
+		pdao.getBestNewBannerList( paramMap );		
 	}
 
+	public void getKindList(HashMap<String, Object> paramMap) {
+		pdao.getKindList( paramMap );
+		
+	}
+
+	public void getProduct(HashMap<String, Object> paramMap) {
+		pdao.getProduct( paramMap );
+		
+	}
+
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

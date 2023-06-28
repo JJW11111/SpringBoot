@@ -42,6 +42,17 @@ function reInsert(id, useyn){
 
 
 
+function go_member_update(){
+	if( document.formm.provider.value=='kakao' ){
+		document.formm.action='memberUpdateKakao';
+	}else{ 
+		document.formm.action='memberUpdate';
+	}
+		
+	document.formm.submit();
+}
+
+
 
 
 

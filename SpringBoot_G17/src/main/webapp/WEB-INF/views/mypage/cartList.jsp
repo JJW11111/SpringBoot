@@ -13,11 +13,11 @@
 		<table id="cartList">
 			<tr><th>상품명</th><th>수 량</th><th>가 격</th><th>주문일</th><th>삭 제</th></tr>
 			<c:forEach items="${cartList}" var="cartVO">
-				<tr><td><a href="productDetail&pseq=${cartVO.pseq}">
-					<h3> ${cartVO.pname} </h3></a></td><td> ${cartVO.quantity} </td>
-   					<td><fmt:formatNumber value="${cartVO.price2*cartVO.quantity}" type="currency"/></td>      
-	   				<td><fmt:formatDate value="${cartVO.indate}" type="date"/></td>      
-       				<td><input type="checkbox" name="cseq" value= "${cartVO.cseq}"></td></tr>
+				<tr><td><a href="productDetail&pseq=${cartVO.PSEQ}">
+					<h3> ${cartVO.PNAME} </h3></a></td><td> ${cartVO.QUANTITY} </td>
+   					<td><fmt:formatNumber value="${cartVO.PRICE2*cartVO.QUANTITY}" type="currency"/></td>      
+	   				<td><fmt:formatDate value="${cartVO.INDATE}" type="date"/></td>      
+       				<td><input type="checkbox" name="cseq" value= "${cartVO.CSEQ}"></td></tr>
 			</c:forEach>
 			<tr><th colspan="2"> 총 액 </th><th colspan="2"> 
 				<fmt:formatNumber value="${totalPrice}" type="currency"/><br></th> 

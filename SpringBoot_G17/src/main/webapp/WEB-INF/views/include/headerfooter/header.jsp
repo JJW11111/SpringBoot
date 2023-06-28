@@ -18,7 +18,7 @@
     	setInterval(function(){
             $('#imgs').animate({ left : num * -968 },1000);
                 num++;
-                if(num==Number('${size}'))num=0;
+                if(num==Number( '${size}' ) )num=0;
         }, 2000);
     });
 </script>

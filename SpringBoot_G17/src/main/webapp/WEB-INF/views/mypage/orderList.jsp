@@ -7,11 +7,11 @@
 <table id="cartList">
 	<tr><th>상품명</th><th>수 량</th><th>가 격</th><th>주문일</th><th>진행상태</th></tr>
 	<c:forEach items="${orderList}" var="orderVO">
-		<tr><td><a href="productDdetail&pseq=${orderVO.pseq}">
-			<h3>${orderVO.pname}</h3></td>	<td> ${orderVO.quantity} </td>
-       		<td><fmt:formatNumber value="${orderVO.price2*orderVO.quantity}" type="currency"/>
+		<tr><td><a href="productDdetail&pseq=${orderVO.PSEQ}">
+			<h3>${orderVO.PNAME}</h3></td>	<td> ${orderVO.QUANTITY} </td>
+       		<td><fmt:formatNumber value="${orderVO.PRICE2*orderVO.QUANTITY}" type="currency"/>
 			</td>      
-        	<td><fmt:formatDate value="${orderVO.indate}" type="date"/></td>
+        	<td><fmt:formatDate value="${orderVO.INDATE}" type="date"/></td>
         	<td> 처리 진행 중 </td></tr>
 	</c:forEach>
 	<tr><th colspan="2"> 총 액 </th><th colspan="2"> 
