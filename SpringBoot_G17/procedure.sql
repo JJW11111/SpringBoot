@@ -84,7 +84,7 @@ BEGIN
     COMMIT;
 END;
 
-SELECT * FROM MEMBER;
+SELECT * FROM MEMBER
 
 
 CREATE OR REPLACE PROCEDURE getKindList(
@@ -178,7 +178,7 @@ BEGIN
     OPEN p_cur FOR SELECT * FROM order_view where oseq=p_oseq ORDER BY RESULT;
 END;
 
-
+SELECT * FROM order_view where oseq=25 ORDER BY RESULT;
 
 
 
@@ -203,59 +203,139 @@ EXCEPTION WHEN OTHERS THEN
 END;
 
 
-
 CREATE OR REPLACE PROCEDURE listOrderByIdIng(
-    p_id IN orders.ID%TYPE, 
-    p_rc OUT SYS_REFCURSOR   )
+    p_id IN ORDERS.ID%TYPE,
+    p_rc OUT SYS_REFCURSOR
+)
 IS
 BEGIN
-    OPEN p_rc FOR 
-    SELECT DISTINCT oseq FROM order_view where id=p_id AND result<>'4' ORDER BY OSEQ DESC;
+    OPEN p_rc FOR
+    SELECT DISTINCT oseq FROM ORDER_VIEW WHERE id=p_id AND (result='1' OR result='2' OR result='3') ORDER BY OSEQ DESC;
 END;
 
 
 
 CREATE OR REPLACE PROCEDURE listOrderByIdAll(
-    p_id IN orders.ID%TYPE, 
-    p_rc OUT SYS_REFCURSOR   )
+    p_id IN ORDERS.ID%TYPE,
+    p_rc OUT SYS_REFCURSOR
+)
 IS
 BEGIN
-    OPEN p_rc FOR 
-    SELECT DISTINCT oseq FROM order_view where id=p_id ORDER BY OSEQ DESC;
-END;
-
-CREATE OR REPLACE PROCEDURE listQna(
-     p_rc OUT SYS_REFCURSOR   )
-IS
-BEGIN
-OPEN p_rc FOR 
-    SELECT*FROM QNA ORDER BY qseq DESC;
+    OPEN p_rc FOR
+    SELECT DISTINCT oseq FROM ORDER_VIEW WHERE id=p_id ORDER BY OSEQ DESC;
 END;
 
 
-CREATE OR REPLACE PROCEDURE getQNa(
-     p_qseq IN QNA.qseq%TYPE,
-     p_rc OUT SYS_REFCURSOR   )
+
+
+CREATE OR REPLACE PROCEDURE listQna (
+    p_rc   OUT     SYS_REFCURSOR )
 IS
 BEGIN
-OPEN p_rc FOR 
-    SELECT*FROM QNA where qseq=p_qseq;
+    OPEN p_rc FOR
+        SELECT * FROM QNA ORDER BY qseq desc;
+END;
+
+
+
+
+CREATE OR REPLACE PROCEDURE getQna (
+    p_qseq IN   Qna.qseq%TYPE,
+    p_rc   OUT     SYS_REFCURSOR )
+IS
+BEGIN
+    OPEN p_rc FOR
+        SELECT * FROM qna WHERE qseq=p_qseq;
 END;
 
 
 
 CREATE OR REPLACE PROCEDURE insertQna(
-    p_id IN qna.id%TYPE ,
-    p_check IN qna.passcheck%TYPE ,
-    p_pass IN qna.pass%TYPE ,
-    p_subject IN qna.subject%TYPE ,
-    p_content IN qna.content%TYPE 
+    p_id IN qna.id%TYPE,
+    p_check IN qna.passcheck%TYPE,
+    p_pass IN qna.pass%TYPE,
+    p_subject  IN qna.subject%TYPE,
+    p_content  IN qna.content%TYPE )
+IS
+BEGIN
+    insert into qna(qseq, id, passcheck, pass, subject, content) 
+    values( qna_seq.nextVal, p_id, p_check, p_pass, p_subject, p_content );
+    commit;    
+END;
+
+
+
+CREATE OR REPLACE PROCEDURE getAdmin(
+    p_id IN   worker.id%TYPE,
+    p_rc   OUT     SYS_REFCURSOR )
+IS
+BEGIN
+    OPEN p_rc FOR
+        select * from worker where id=p_id;
+END;
+
+CREATE OR REPLACE PROCEDURE adminGetAllCount(
+    p_tableName NUMBER,
+    p_key IN PRODUCT.NAME%TYPE,
+    p_cnt  OUT  NUMBER  )
+IS
+    v_cnt NUMBER;
+BEGIN
+    IF  p_tableName=1  THEN
+        SELECT COUNT(*) INTO v_cnt FROM product WHERE name LIKE '%'||p_key||'%';
+    ELSIF p_tableName=2 THEN
+        SELECT COUNT(*) INTO v_cnt FROM member WHERE name LIKE '%'||p_key||'%';
+    ELSIF p_tableName=3 THEN
+        SELECT COUNT(*) INTO v_cnt FROM order_view WHERE pname LIKE '%'||p_key||'%';
+    ELSIF p_tableName=4 THEN
+        SELECT COUNT(*) INTO v_cnt FROM qna WHERE subject LIKE '%'||p_key||'%';
+    END IF;
+    p_cnt := v_cnt;
+END;
+
+
+
+
+
+CREATE OR REPLACE PROCEDURE getProductList(
+    p_startNum IN NUMBER,
+    p_endNUM IN NUMBER,
+    p_key IN PRODUCT.NAME%TYPE,
+    p_rc   OUT     SYS_REFCURSOR
 )
 IS
 BEGIN
-    INSERT INTO qna( qseq, id, passcheck, pass, subject, content )
-    VALUES( qna_seq.nextVal, p_id, p_check, p_pass, p_subject, p_content );
+    OPEN p_rc FOR
+        SELECT * FROM (
+        SELECT * FROM (
+        SELECT rownum as rn, p.* FROM
+        ((SELECT * FROM PRODUCT WHERE name LIKE '%'||p_key||'%'  ORDER BY PSEQ DESC) p)
+        )WHERE rn>=p_startNum
+        )WHERE rn<=p_endNum;
+    
+END;
+
+
+CREATE OR REPLACE PROCEDURE insertProduct(
+    p_name IN product.name%TYPE,
+    p_kind IN product.kind%TYPE, 
+    p_price1 IN product.price1%TYPE,
+    p_price2 IN product.price2%TYPE, 
+    p_price3 IN product.price3%TYPE, 
+    p_content IN product.content%TYPE, 
+    p_image IN product.image%TYPE  )
+IS
+BEGIN
+    INSERT INTO product( pseq, name, kind, price1, price2, price3, content, image) 
+    VALUES( product_seq.nextVal, p_name, p_kind, p_price1, p_price2, p_price3, p_content, p_image );
     COMMIT;
 END;
+
+
+
+
+
+
+
 
 

@@ -89,80 +89,80 @@ public class OrderController {
 		return "redirect:/orderList?oseq="+oseq;
 	}
 	
-	@RequestMapping(value="/myPage")
-	public ModelAndView mypage(HttpServletRequest request) {
+	
+	
+	@RequestMapping(value="/myPage")  
+	public ModelAndView mypage( HttpServletRequest request ) {
 		
 		ModelAndView mav = new ModelAndView();
 		HttpSession session = request.getSession();
 		HashMap<String, Object> loginUser 
-		= (HashMap<String, Object>)session.getAttribute("loginUser");
-		if(loginUser == null) {
+			= (HashMap<String, Object>)session.getAttribute("loginUser");
+		if( loginUser == null ) {
 			mav.setViewName("member/login");
 		}else {
-			// 로그인한 사람의 아이디를 보내서 현재 진행중인 주문내역을 "XXX 상품 포한 X건" 형태의 리스트로 정리해서 리턴
+			// 로그인한 사람의 아이디를 보내서   현재 진행중인 주문내역을  "XXX 상품 포함 X건" 형태의 리스트로 정리해서 리턴
 			HashMap<String, Object> paramMap = new HashMap<String, Object>();
-			paramMap.put("id", loginUser.get("ID"));
+			paramMap.put("id",  loginUser.get("ID") );
+			// paramMap.put("ref_cursor", null);
 			
-            os.myPageList(paramMap);
-
-			ArrayList<HashMap<String, Object>> finalList 
-			=  (ArrayList<HashMap<String, Object>>)paramMap.get("finalList");
+			os.myPageList(paramMap);
+			ArrayList<HashMap<String, Object>> finalList  
+				= (ArrayList<HashMap<String, Object>>) paramMap.get("finalList");
 			
 			mav.addObject("orderList", finalList);
-            mav.addObject("title","진행중인 주문내역");
-            mav.setViewName("mypage/mypage");
-			
+			mav.addObject("title", " 진행중인 주문내역");
+			mav.setViewName("mypage/mypage");
 		}
 		return mav;
 	}
 	
-	@RequestMapping(value="/orderAll")
-	public ModelAndView orderAll(HttpServletRequest request) {
-		
+	
+	@RequestMapping(value="/orderAll")  
+	public ModelAndView orderAll( HttpServletRequest request ) {
 		ModelAndView mav = new ModelAndView();
 		HttpSession session = request.getSession();
 		HashMap<String, Object> loginUser 
-		= (HashMap<String, Object>)session.getAttribute("loginUser");
-		if(loginUser == null) {
+			= (HashMap<String, Object>)session.getAttribute("loginUser");
+		if( loginUser == null ) {
 			mav.setViewName("member/login");
 		}else {
 			HashMap<String, Object> paramMap = new HashMap<String, Object>();
-			paramMap.put("id", loginUser.get("ID"));		
-            os.orderAllList(paramMap);
-			ArrayList<HashMap<String, Object>> finalList 
-			=  (ArrayList<HashMap<String, Object>>)paramMap.get("finalList");
-			
+			paramMap.put("id",  loginUser.get("ID") );			
+			os.orderAllList(paramMap);
+			ArrayList<HashMap<String, Object>> finalList  
+				= (ArrayList<HashMap<String, Object>>) paramMap.get("finalList");
 			mav.addObject("orderList", finalList);
-            mav.addObject("title","총 주문내역");
-            mav.setViewName("mypage/mypage");
-			
+			mav.addObject("title", " 진행중인 주문내역");
+			mav.setViewName("mypage/mypage");
 		}
 		return mav;
 	}
 	
-	@RequestMapping("/orderDetail")
-	public ModelAndView orderDetail(HttpServletRequest request,
-			@RequestParam("oseq") int oseq) {
-		
-	    ModelAndView mav = new ModelAndView();
+	
+	@RequestMapping(value="/orderDetail")  
+	public ModelAndView orderDetail( HttpServletRequest request, 
+			@RequestParam("oseq") int oseq ) {
+		ModelAndView mav = new ModelAndView();
 		HttpSession session = request.getSession();
 		HashMap<String, Object> loginUser 
-		= (HashMap<String, Object>)session.getAttribute("loginUser");
-		if (loginUser == null) {
+			= (HashMap<String, Object>)session.getAttribute("loginUser");
+		if( loginUser == null ) {
 			mav.setViewName("member/login");
-		} else {
-	    	HashMap<String, Object> paramMap = new HashMap<String, Object>();
-	    	paramMap.put("oseq", oseq);
-	    	paramMap.put("ref_cursor", null);
-	    	os.listOrderByOseq(paramMap);
-	    	ArrayList<HashMap<String, Object>> orderListByOseq 
-			=  (ArrayList<HashMap<String, Object>>)paramMap.get("ref_cursor");
-	    	
-			mav.addObject("totalPrice", paramMap.get("totalPrice") );
+		}else {
+			HashMap<String , Object> paramMap = new HashMap<String , Object>();
+			paramMap.put("oseq", oseq);
+			paramMap.put("ref_cursor", null);
+			
+			os.listOrderByOseq(paramMap);
+			
+			ArrayList<HashMap<String,Object>> orderListByOseq 
+				= (ArrayList<HashMap<String,Object>>) paramMap.get("ref_cursor");
+		
+			mav.addObject("totalPrice", paramMap.get("totalPrice"));
 			mav.addObject("orderList", orderListByOseq);
-	    	mav.addObject("orderDetail", orderListByOseq.get(0) );
-	    	mav.setViewName("mypage/orderDetail");
-
+			mav.addObject("orderDetail", orderListByOseq.get(0) );
+			mav.setViewName("mypage/orderDetail");
 		}
 		return mav;
 	}

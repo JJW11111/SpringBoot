@@ -8,9 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface IQnaDao {
 
 	void listQna(HashMap<String, Object> paramMap);
-
 	void getQna(HashMap<String, Object> paramMap);
-
 	void insertQna(HashMap<String, Object> paramMap);
 
 	

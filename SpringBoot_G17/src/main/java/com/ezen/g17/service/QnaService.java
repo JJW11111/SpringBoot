@@ -14,17 +14,15 @@ public class QnaService {
 	IQnaDao qdao;
 
 	public void listQna(HashMap<String, Object> paramMap) {
-		qdao.listQna( paramMap );	
+		qdao.listQna(paramMap);		
 	}
 
 	public void getQna(HashMap<String, Object> paramMap) {
-		qdao.getQna( paramMap );	
-		
+		qdao.getQna( paramMap );		
 	}
 
 	public void insertQna(HashMap<String, Object> paramMap) {
-		qdao.insertQna( paramMap );	
-		
+		qdao.insertQna( paramMap);
 	}
 
 	

@@ -39,23 +39,28 @@
 		}
 	</insert>
 	
-	<select id="listOrderByIdIng" statementType="CALLABLE" parameterType="java.util.HashMap">
-		{  
+	
+	
+	<select id="listOrderByIdIng" statementType="CALLABLE" parameterType="java.util.HashMap" >
+		{ 
 			CALL listOrderByIdIng( 
 				#{id},
 				#{ref_cursor , mode=OUT, jdbcType=CURSOR, javaType=ResultSet, resultMap=orderMap}
-			)	  
+			) 
 		}
 	</select>
 	
-	<select id="listOrderByIdAll" statementType="CALLABLE" parameterType="java.util.HashMap">
-		{  
+	
+	<select id="listOrderByIdAll" statementType="CALLABLE" parameterType="java.util.HashMap" >
+		{ 
 			CALL listOrderByIdAll( 
 				#{id},
 				#{ref_cursor , mode=OUT, jdbcType=CURSOR, javaType=ResultSet, resultMap=orderMap}
-			)	  
+			) 
 		}
 	</select>
+	
+	
 </mapper>
 
 

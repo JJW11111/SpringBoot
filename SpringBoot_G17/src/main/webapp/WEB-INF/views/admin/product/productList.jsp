@@ -20,14 +20,14 @@
 	    	</c:when>
 	    	<c:otherwise>
 	    		<c:forEach items="${productList}" var="productVO">
-			   		<tr><td height="23" align="center" >${productVO.pseq}</td>
+			   		<tr><td height="23" align="center" >${productVO.PSEQ}</td>
 						<td style="text-align:left; padding-left:50px; padding-right:0px;">
-						<a href="#" onClick="go_detail('${productVO.pseq}')">${productVO.name}</a></td>
-						<td><fmt:formatNumber value="${productVO.price1}"/></td>
-						<td><fmt:formatNumber value="${productVO.price2}"/></td>
-			      		<td><fmt:formatDate value="${productVO.indate}"/></td>
+						<a href="#" onClick="go_detail('${productVO.PSEQ}')">${productVO.NAME}</a></td>
+						<td><fmt:formatNumber value="${productVO.PRICE1}"/></td>
+						<td><fmt:formatNumber value="${productVO.PRICE2}"/></td>
+			      		<td><fmt:formatDate value="${productVO.INDATE}"/></td>
 			      		<td><c:choose>
-			      			<c:when test='${productVO.useyn=="N"}'>미사용</c:when>
+			      			<c:when test='${productVO.USEYN=="N"}'>미사용</c:when>
 			   	 			<c:otherwise>사용</c:otherwise> 
 						</c:choose></td>
 					</tr>

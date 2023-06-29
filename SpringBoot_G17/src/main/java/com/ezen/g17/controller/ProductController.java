@@ -45,7 +45,7 @@ public class ProductController {
 		mav.addObject( "bannerList", list3 );
 		mav.addObject("size", list3.size());
 		
-		mav.setViewName("desktopIndex");
+		mav.setViewName("desktopindex");
 		return mav;
 	}
 	
@@ -103,8 +103,23 @@ public class ProductController {
 	@RequestMapping("/mobilemain")
 	public ModelAndView mobilemain( ) {
 		ModelAndView mav = new  ModelAndView();
+		System.out.println(10);
 		
-		mav.setViewName("mobileindex");
+		HashMap<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("ref_cursor1", null);
+		paramMap.put("ref_cursor2", null);
+		paramMap.put("ref_cursor3", null);
+		
+		ps.getBestNewBannerList(paramMap);
+		
+		ArrayList<HashMap<String , Object>> list1
+			= (ArrayList<HashMap<String , Object>>) paramMap.get("ref_cursor1");
+		ArrayList<HashMap<String , Object>> list2
+			= (ArrayList<HashMap<String , Object>>) paramMap.get("ref_cursor2");
+		mav.addObject("newProductList", list1);
+		mav.addObject("bestProductList", list2);
+		
+		mav.setViewName("mobile/mobileindex");
 		return mav;
 	}
 }

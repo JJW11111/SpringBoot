@@ -10,8 +10,8 @@
         	<th>결제 금액</th> <th>주문 상세</th> <th>처리상태</th></tr>
       	<c:forEach items="${orderList}"  var="orderVO">
       	<tr><td><fmt:formatDate value="${orderVO.INDATE}" type="date"/></td>
-      		<td>${orderVO.OSEQ} </td>   	<td>${orderVO.PNAME} </td>
-        	<td><fmt:formatNumber value="${orderVO.PRICE2}" type="currency"/> </td>
+      		<td>${orderVO.ISEQ} </td>   	<td>${orderVO.PNAME} </td>
+        	<td><fmt:formatNumber value="${orderVO.price2}" type="currency"/> </td>
         	<td><a href="orderDetail?oseq=${orderVO.OSEQ}">조회</a></td><td>
         	<c:choose>
 				<c:when test="${orderVO.RESULT=='4'}">구매확정</c:when>
